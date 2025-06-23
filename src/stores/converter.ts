@@ -140,6 +140,21 @@ export class ConverterStore {
 		}
 	}
 
+	swapPair(id: string) {
+		const pair = this.findPair(id)
+		if (!pair) return
+
+		const tempCurrency = pair.fromCurrency
+		pair.fromCurrency = pair.toCurrency
+		pair.toCurrency = tempCurrency
+
+		const tempAmount = pair.amountFrom
+		pair.amountFrom = pair.amountTo
+		pair.amountTo = tempAmount
+
+		this.savePairs()
+	}
+
 	private findPair(id: string): ConversionPair | undefined {
 		return this.pairs.find(pair => pair.id === id)
 	}

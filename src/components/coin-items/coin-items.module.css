@@ -1,0 +1,19 @@
+.flag {
+	flex-shrink: 0;
+	border-radius: calc(0.25rem - 4px);
+}
+
+.flag svg {
+	flex-shrink: 0;
+	border-radius: calc(0.25rem - 4px);
+}
+
+.coinLabel {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 0.75rem;
+	line-height: 1rem;
+	font-weight: 500;
+	text-transform: uppercase;
+}

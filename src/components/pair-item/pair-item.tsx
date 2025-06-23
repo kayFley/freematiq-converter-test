@@ -1,10 +1,11 @@
-import { ConverterField } from '@/components/converter-field'
-import { Button } from '@/components/ui/button'
+import { ConverterField } from '@/components/converter-field/converter-field'
+import { Button } from '@/components/ui/button/button'
 import { COINS } from '@/constants/coins'
 import { ConversionPair, converterStore } from '@/stores/converter'
 import { RiCloseFill } from '@remixicon/react'
 import { observer } from 'mobx-react-lite'
 import { useCallback, useMemo } from 'react'
+import styles from './pair-item.module.css'
 
 export const PairItem = observer(({ pair }: { pair: ConversionPair }) => {
 	const handleRemove = useCallback(() => {
@@ -33,6 +34,16 @@ export const PairItem = observer(({ pair }: { pair: ConversionPair }) => {
 		[pair.id],
 	)
 
+	const handleSwap = useCallback(() => {
+		const tempCurrency = pair.fromCurrency
+		converterStore.updatePairFromCurrency(pair.id, pair.toCurrency)
+		converterStore.updatePairToCurrency(pair.id, tempCurrency)
+
+		const tempAmount = pair.amountFrom
+		converterStore.updatePairAmountFrom(pair.id, pair.amountTo)
+		converterStore.updatePairAmountTo(pair.id, tempAmount)
+	}, [pair])
+
 	const exchangeRate = useMemo(() => {
 		if (converterStore.loading) return null
 		const { fromCurrency, toCurrency } = pair
@@ -51,10 +62,10 @@ export const PairItem = observer(({ pair }: { pair: ConversionPair }) => {
 	])
 
 	return (
-		<div key={pair.id}>
-			<div className='relative flex flex-col items-center gap-1 sm:flex-row'>
+		<div key={pair.id} className={styles.container}>
+			<div className={styles.pairContainer}>
 				<Button
-					className='absolute top-1 right-1 z-10'
+					className={styles.removeButton}
 					variant='ghost'
 					size='icon'
 					onClick={handleRemove}
@@ -75,18 +86,17 @@ export const PairItem = observer(({ pair }: { pair: ConversionPair }) => {
 					coins={COINS}
 					onValueChange={handleAmountToChange}
 					onCurrencyChange={handleToCurrencyChange}
+					onSwap={handleSwap}
 				/>
 			</div>
-			<div className='text-muted-foreground my-1 grid grid-cols-[1fr_auto_1fr] items-center gap-1 text-center text-xs'>
+			<div className={styles.exchangeRate}>
 				{converterStore.loading ? (
-					<div className='bg-background/0 h-4 w-full' />
+					<div className={styles.loaderPlaceholder} />
 				) : (
 					<>
-						<span className='text-right uppercase'>
-							1 {pair.fromCurrency}
-						</span>
-						<span className='text-muted-foreground'>=</span>
-						<span className='text-left uppercase'>
+						<span>1 {pair.fromCurrency}</span>
+						<span>=</span>
+						<span>
 							{exchangeRate} {pair.toCurrency}
 						</span>
 					</>

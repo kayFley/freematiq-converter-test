@@ -1,17 +1,18 @@
-import { PairItem } from '@/components/pair-item'
-import { Button } from '@/components/ui/button'
+import { PairItem } from '@/components/pair-item/pair-item'
+import { Button } from '@/components/ui/button/button'
 import { ConversionPair, converterStore } from '@/stores/converter'
 import { PlusIcon } from 'lucide-react'
 import { observer } from 'mobx-react-lite'
 import { AnimatePresence, motion } from 'motion/react'
 import { useCallback } from 'react'
+import styles from './converter.module.css'
 
 export const Converter = observer(() => {
 	const handleAddPair = useCallback(() => converterStore.addPair(), [])
 
 	return (
-		<div className='dark bg-background dark:bg-secondary/64 min-h-screen'>
-			<div className='dark bg-background dark:bg-secondary/64 mx-auto h-auto max-w-4xl rounded-b-sm p-2'>
+		<div className={`dark ${styles.container}`}>
+			<div className={`dark ${styles.innerContainer}`}>
 				<AnimatePresence>
 					{converterStore.pairs.map((pair: ConversionPair) => (
 						<motion.div
@@ -29,7 +30,7 @@ export const Converter = observer(() => {
 
 				<Button
 					size='lg'
-					className='w-full opacity-80 hover:opacity-100'
+					className={styles.addButton}
 					onClick={handleAddPair}
 				>
 					<PlusIcon />
