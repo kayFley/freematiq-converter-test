@@ -12,31 +12,29 @@ export const Converter = observer(() => {
 
 	return (
 		<div className={`dark ${styles.container}`}>
-			<div className={`dark ${styles.innerContainer}`}>
-				<AnimatePresence>
-					{converterStore.pairs.map((pair: ConversionPair) => (
-						<motion.div
-							key={pair.id}
-							initial={{ opacity: 0, height: 0 }}
-							animate={{ opacity: 1, height: 'auto' }}
-							exit={{ opacity: 0, height: 0 }}
-							transition={{ duration: 0.2 }}
-							layout
-						>
-							<PairItem key={pair.id} pair={pair} />
-						</motion.div>
-					))}
-				</AnimatePresence>
+			<AnimatePresence>
+				{converterStore.pairs.map((pair: ConversionPair) => (
+					<motion.div
+						key={pair.id}
+						initial={{ opacity: 0, height: 0 }}
+						animate={{ opacity: 1, height: 'auto' }}
+						exit={{ opacity: 0, height: 0 }}
+						transition={{ duration: 0.2 }}
+						layout
+					>
+						<PairItem key={pair.id} pair={pair} />
+					</motion.div>
+				))}
+			</AnimatePresence>
 
-				<Button
-					size='lg'
-					className={styles.addButton}
-					onClick={handleAddPair}
-				>
-					<PlusIcon />
-					Добавить пару валют
-				</Button>
-			</div>
+			<Button
+				size='lg'
+				className={styles.addButton}
+				onClick={handleAddPair}
+			>
+				<PlusIcon />
+				Добавить пару валют
+			</Button>
 		</div>
 	)
 })
