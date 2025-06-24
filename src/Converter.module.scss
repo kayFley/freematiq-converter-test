@@ -1,0 +1,33 @@
+.container {
+	min-height: 100%;
+	background-color: var(--background);
+}
+
+.innerContainer {
+	margin: 0 auto;
+	height: auto;
+	max-width: 56rem;
+	border-bottom-left-radius: 0.125rem;
+	border-bottom-right-radius: 0.125rem;
+	padding: 0.5rem;
+	background-color: var(--background);
+}
+
+.dark {
+	.container {
+		background-color: rgba(var(--secondary), 0.64);
+	}
+
+	.innerContainer {
+		background-color: rgba(var(--secondary), 0.64);
+	}
+
+	.addButton {
+		opacity: 0.8;
+		transition: opacity 150ms ease;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}

@@ -1,11 +1,11 @@
 .flag {
 	flex-shrink: 0;
 	border-radius: calc(0.25rem - 4px);
-}
 
-.flag svg {
-	flex-shrink: 0;
-	border-radius: calc(0.25rem - 4px);
+	svg {
+		flex-shrink: 0;
+		border-radius: calc(0.25rem - 4px);
+	}
 }
 
 .coinLabel {

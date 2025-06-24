@@ -5,7 +5,7 @@ import { ConversionPair, converterStore } from '@/stores/converter'
 import { RiCloseFill } from '@remixicon/react'
 import { observer } from 'mobx-react-lite'
 import { useCallback, useMemo } from 'react'
-import styles from './pair-item.module.css'
+import styles from './pair-item.module.scss'
 
 export const PairItem = observer(({ pair }: { pair: ConversionPair }) => {
 	const handleRemove = useCallback(() => {

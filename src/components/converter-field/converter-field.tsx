@@ -12,7 +12,7 @@ import { RiArrowLeftRightLine, RiArrowUpDownLine } from '@remixicon/react'
 import { observer } from 'mobx-react-lite'
 import { useCallback } from 'react'
 import { I18nProvider, Input, Label, NumberField } from 'react-aria-components'
-import styles from './converter-field.module.css'
+import styles from './converter-field.module.scss'
 
 export const ConverterField = observer(
 	({

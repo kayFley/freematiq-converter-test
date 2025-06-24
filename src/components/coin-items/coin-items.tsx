@@ -2,7 +2,7 @@ import { SelectItem } from '@/components/ui/select/select'
 import { COINS } from '@/constants/coins'
 import { memo } from 'react'
 import ReactCountryFlag from 'react-country-flag'
-import styles from './coin-items.module.css'
+import styles from './coin-items.module.scss'
 
 export const CoinItems = memo(({ coins }: { coins: typeof COINS }) => (
 	<>

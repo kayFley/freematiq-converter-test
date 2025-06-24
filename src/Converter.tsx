@@ -5,7 +5,7 @@ import { PlusIcon } from 'lucide-react'
 import { observer } from 'mobx-react-lite'
 import { AnimatePresence, motion } from 'motion/react'
 import { useCallback } from 'react'
-import styles from './converter.module.css'
+import styles from './converter.module.scss'
 
 export const Converter = observer(() => {
 	const handleAddPair = useCallback(() => converterStore.addPair(), [])
