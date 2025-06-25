@@ -1,0 +1,62 @@
+.container {
+	margin-bottom: 1rem;
+}
+
+.pairContainer {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.25rem;
+
+	@media (min-width: 640px) {
+		flex-direction: row;
+	}
+}
+
+.removeButton {
+	position: absolute;
+	top: 0.25rem;
+	right: 0.25rem;
+	z-index: 10;
+	background: transparent;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	opacity: 0.25;
+	transition: opacity 150ms ease;
+
+	&:hover {
+		opacity: 1;
+	}
+}
+
+.exchangeRate {
+	color: var(--muted-foreground);
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+	align-items: center;
+	gap: 0.25rem;
+	margin-top: 0.25rem;
+	margin-bottom: 0.25rem;
+	text-align: center;
+	font-size: 0.75rem;
+	line-height: 1rem;
+
+	span {
+		&:first-child {
+			text-align: right;
+			text-transform: uppercase;
+		}
+		&:last-child {
+			text-align: left;
+			text-transform: uppercase;
+		}
+	}
+
+	.loaderPlaceholder {
+		background-color: transparent;
+		height: 1rem;
+		width: 100%;
+	}
+}

@@ -1,0 +1,217 @@
+$sizes: (
+	Small: 0.75rem,
+	Medium: 0.875rem,
+	Large: 1rem,
+	XLarge: 1.125rem,
+	XXLarge: 1.25rem,
+);
+
+@each $name, $size in $sizes {
+	.inputSize#{$name} {
+		font-size: $size;
+	}
+}
+
+.swapIcon {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 2.5rem;
+	height: 2.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 100%;
+	background: linear-gradient(to bottom, var(--primary), var(--primary-to));
+	box-shadow:
+		0 1px 2px 0 rgba(0, 0, 0, 0.05),
+		inset 0 1px 0 rgba(255, 255, 255, 0.15);
+	z-index: 10;
+}
+
+.swapIconLeft {
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.arrowHorizontal {
+	display: none;
+}
+
+.arrowVertical {
+	display: block;
+}
+
+.card {
+	position: relative;
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+	padding: 1.25rem;
+	border-radius: 0.75rem;
+	background-color: var(--card);
+}
+
+.cardLast {
+	mask-image: radial-gradient(
+		ellipse 26px 24px at 50% 0%,
+		transparent 0,
+		transparent 24px,
+		black 25px
+	);
+}
+
+.cardFirst {
+	mask-image: radial-gradient(
+		ellipse 26px 24px at 50% 100%,
+		transparent 0,
+		transparent 24px,
+		black 25px
+	);
+}
+
+@media (min-width: 640px) {
+	.cardLast {
+		mask-image: radial-gradient(
+			ellipse 24px 26px at 0% 50%,
+			transparent 0,
+			transparent 22px,
+			black 23px
+		);
+		padding-left: 2rem;
+	}
+
+	.cardFirst {
+		mask-image: radial-gradient(
+			ellipse 24px 26px at 100% 50%,
+			transparent 0,
+			transparent 22px,
+			black 23px
+		);
+		padding-right: 2rem;
+	}
+
+	.swapIcon {
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	.arrowHorizontal {
+		display: block;
+	}
+
+	.arrowVertical {
+		display: none;
+	}
+}
+
+.topBorder {
+	position: absolute;
+	top: -1px;
+	left: 50%;
+	width: 50px;
+	height: 25px;
+	transform: translateX(-50%);
+	border-bottom-left-radius: 9999px;
+	border-bottom-right-radius: 9999px;
+	border-top: none;
+}
+
+.inputWrapper {
+	flex-grow: 1;
+}
+
+.input {
+	margin-bottom: 0.125rem;
+	margin-left: -0.25rem;
+	width: 100%;
+	max-width: 12rem;
+	appearance: none;
+	border-radius: 0.5rem;
+	background-color: transparent;
+	padding: 0.25rem;
+	font-weight: 600;
+	line-height: 1.75rem;
+
+	&:focus {
+		background-color: rgba(var(--card), 0.64);
+		outline: none;
+	}
+}
+
+.selectTriggerCustom {
+	height: 2rem;
+	border-radius: 9999px;
+	border: none;
+	padding: 0.5rem;
+	background-color: rgba(var(--card), 0.64);
+
+	&:hover {
+		background-color: rgba(var(--card), 0.8);
+	}
+
+	svg {
+		color: var(--muted-foreground);
+		opacity: 0.8;
+		flex-shrink: 0;
+	}
+}
+
+.selectContentCustom {
+	border: none;
+	/* box-shadow:
+		0 4px 6px -1px rgba(0, 0, 0, 0.1),
+		0 2px 4px -1px rgba(0, 0, 0, 0.05),
+		inset 0 1px 0 rgba(255, 255, 255, 0.15); */
+	background-color: #1f1f23;
+	color: rgba(255, 255, 255, 0.8);
+
+	@media (min-width: 640px) {
+		.searchHint {
+			display: block;
+		}
+	}
+}
+
+.coinGrid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.25rem;
+	padding: 0.25rem;
+}
+
+.selectItemCustom {
+	padding-right: 2rem;
+
+	span {
+		right: 0.5rem;
+		left: auto;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	svg {
+		color: var(--muted-foreground);
+		opacity: 0.8;
+		flex-shrink: 0;
+	}
+}
+
+.swapIcon {
+	cursor: pointer;
+	transition: transform 0.3s ease;
+}
+
+.dark {
+	.selectContentCustom {
+		background-color: #1f1f23;
+		color: rgba(255, 255, 255, 0.8);
+	}
+	.card {
+		background-color: rgba(var(--card), 0.64);
+	}
+}
