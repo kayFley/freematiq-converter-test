@@ -35,6 +35,7 @@ export const ConverterField = observer(
 		onValueChange: (value: number | null) => void
 		onCurrencyChange: (currency: string) => void
 		onSwap?: () => void
+		onClear?: () => void
 	}) => {
 		const [inputText, setInputText] = useState<string>(
 			value != null ? String(value) : '',
@@ -114,17 +115,11 @@ export const ConverterField = observer(
 						tabIndex={0}
 					>
 						<RiArrowLeftRightLine
-							className={cn(
-								'text-primary-foreground',
-								styles.arrowHorizontal,
-							)}
+							className={cn('text-primary-foreground', styles.arrowHorizontal)}
 							size={20}
 						/>
 						<RiArrowUpDownLine
-							className={cn(
-								'text-primary-foreground',
-								styles.arrowVertical,
-							)}
+							className={cn('text-primary-foreground', styles.arrowVertical)}
 							size={20}
 						/>
 					</div>
@@ -137,10 +132,7 @@ export const ConverterField = observer(
 					)}
 				>
 					{isLast && (
-						<div
-							className={styles.topBorder}
-							aria-hidden='true'
-						></div>
+						<div className={styles.topBorder} aria-hidden='true'></div>
 					)}
 					<div className={styles.inputWrapper}>
 						<I18nProvider locale='ru-RU'>
@@ -164,10 +156,7 @@ export const ConverterField = observer(
 							>
 								<Label className='sr-only'>Сумма</Label>
 								<Input
-									className={cn(
-										styles.input,
-										getTextSizeClass(),
-									)}
+									className={cn(styles.input, getTextSizeClass())}
 									maxLength={20}
 									placeholder='0.0'
 									onInput={handleInput}
@@ -187,22 +176,12 @@ export const ConverterField = observer(
 						)}
 					</div>
 					<div>
-						<Select
-							value={currency}
-							onValueChange={handleCurrencyChange}
-						>
-							<SelectTrigger
-								className={styles.selectTriggerCustom}
-							>
+						<Select value={currency} onValueChange={handleCurrencyChange}>
+							<SelectTrigger className={styles.selectTriggerCustom}>
 								<SelectValue placeholder='Select coin' />
 							</SelectTrigger>
-							<SelectContent
-								className={styles.selectContent}
-								align='center'
-							>
-								<div className={styles.searchHint}>
-									для поиска начните ввод
-								</div>
+							<SelectContent className={styles.selectContent} align='center'>
+								<div className={styles.searchHint}>для поиска начните ввод</div>
 								<div className={styles.coinGrid}>
 									<CoinItems coins={coins} />
 								</div>
