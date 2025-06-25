@@ -8,8 +8,8 @@ export interface ConversionPair {
 	id: string
 	fromCurrency: string
 	toCurrency: string
-	amountFrom: number
-	amountTo: number
+	amountFrom: number | null
+	amountTo: number | null
 }
 
 const LOCAL_STORAGE_KEY = 'conversionPairs'
@@ -33,7 +33,18 @@ export class ConverterStore {
 		const data = localStorage.getItem(LOCAL_STORAGE_KEY)
 		if (data) {
 			try {
-				this.pairs = JSON.parse(data)
+				const arr: any[] = JSON.parse(data)
+				this.pairs = arr.map(item => ({
+					...item,
+					amountFrom:
+						item.amountFrom != null && item.amountFrom !== 0
+							? item.amountFrom
+							: null,
+					amountTo:
+						item.amountTo != null && item.amountTo !== 0
+							? item.amountTo
+							: null,
+				}))
 			} catch (e) {
 				this.pairs = []
 			}
@@ -49,6 +60,7 @@ export class ConverterStore {
 			clearTimeout(this.saveTimeout)
 		}
 		this.saveTimeout = setTimeout(() => {
+			// Сохраняем as-is, с null. При загрузке отличим от 0.
 			localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.pairs))
 			this.saveTimeout = null
 		}, SAVE_DELAY)
@@ -89,11 +101,10 @@ export class ConverterStore {
 			id,
 			fromCurrency: fromCurrency || 'USD',
 			toCurrency: toCurrency || 'RUB',
-			amountFrom: 0,
-			amountTo: 0,
+			amountFrom: null,
+			amountTo: null,
 		}
 		this.pairs.push(newPair)
-		this.recalcPair(newPair)
 		this.savePairs()
 	}
 
@@ -122,20 +133,28 @@ export class ConverterStore {
 		}
 	}
 
-	updatePairAmountFrom(id: string, amount: number) {
+	updatePairAmountFrom(id: string, amount: number | null) {
 		const pair = this.findPair(id)
 		if (pair) {
 			pair.amountFrom = amount
-			this.convertForward(pair)
+			if (amount == null) {
+				pair.amountTo = null
+			} else {
+				this.convertForward(pair)
+			}
 			this.savePairs()
 		}
 	}
 
-	updatePairAmountTo(id: string, amount: number) {
+	updatePairAmountTo(id: string, amount: number | null) {
 		const pair = this.findPair(id)
 		if (pair) {
 			pair.amountTo = amount
-			this.convertBackward(pair)
+			if (amount == null) {
+				pair.amountFrom = null
+			} else {
+				this.convertBackward(pair)
+			}
 			this.savePairs()
 		}
 	}
@@ -178,19 +197,29 @@ export class ConverterStore {
 	private convertForward(pair: ConversionPair) {
 		const rate = this.getRate(pair)
 		if (!rate) return
-
-		pair.amountTo = Number((pair.amountFrom * rate).toFixed(2))
+		if (pair.amountFrom == null) {
+			pair.amountTo = null
+		} else {
+			pair.amountTo = Number((pair.amountFrom * rate).toFixed(2))
+		}
 	}
 
 	private convertBackward(pair: ConversionPair) {
 		const rate = this.getRate(pair)
 		if (!rate) return
-
-		pair.amountFrom = Number((pair.amountTo / rate).toFixed(2))
+		if (pair.amountTo == null) {
+			pair.amountFrom = null
+		} else {
+			pair.amountFrom = Number((pair.amountTo / rate).toFixed(2))
+		}
 	}
 
 	recalcPair(pair: ConversionPair) {
-		this.convertForward(pair)
+		if (pair.amountFrom != null) {
+			this.convertForward(pair)
+		} else if (pair.amountTo != null) {
+			this.convertBackward(pair)
+		}
 	}
 }
 

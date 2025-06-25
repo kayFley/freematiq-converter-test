@@ -122,6 +122,10 @@ $sizes: (
 
 .inputWrapper {
 	flex-grow: 1;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-right: 8px;
 }
 
 .input {
@@ -162,10 +166,6 @@ $sizes: (
 
 .selectContentCustom {
 	border: none;
-	/* box-shadow:
-		0 4px 6px -1px rgba(0, 0, 0, 0.1),
-		0 2px 4px -1px rgba(0, 0, 0, 0.05),
-		inset 0 1px 0 rgba(255, 255, 255, 0.15); */
 	background-color: #1f1f23;
 	color: rgba(255, 255, 255, 0.8);
 
@@ -206,11 +206,62 @@ $sizes: (
 	transition: transform 0.3s ease;
 }
 
+.selectContent {
+	border: none;
+	box-shadow:
+		inset 0 1px rgba(255, 255, 255, 0.15),
+		0 1px 2px rgba(0, 0, 0, 0.1);
+
+	[role='option'] {
+		padding-inline-start: 2rem;
+		padding-inline-end: 0.4rem;
+
+		> span {
+			margin-inline-start: auto;
+			margin-inline-end: 0.4rem;
+			display: flex;
+			align-items: center;
+			gap: 0.4rem;
+
+			> svg {
+				flex-shrink: 0;
+				color: rgba(107, 114, 128, 0.8);
+			}
+		}
+	}
+}
+
 .dark {
+	.selectContent {
+		border: none;
+		box-shadow:
+			inset 0 1px rgba(255, 255, 255, 0.15),
+			0 1px 2px rgba(0, 0, 0, 0.1);
+
+		[role='option'] {
+			padding-inline-start: 2rem;
+			padding-inline-end: 0.4rem;
+
+			> span {
+				margin-inline-start: auto;
+				margin-inline-end: 0.4rem;
+				display: flex;
+				align-items: center;
+				gap: 0.4rem;
+
+				> svg {
+					flex-shrink: 0;
+					color: rgba(107, 114, 128, 0.8);
+				}
+			}
+		}
+	}
+
 	.selectContentCustom {
 		background-color: #1f1f23;
 		color: rgba(255, 255, 255, 0.8);
 	}
+
 	.card {
 		background-color: rgba(var(--card), 0.64);
 	}
