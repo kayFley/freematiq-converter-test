@@ -63,23 +63,20 @@ export const ConverterField = observer(
 			[onValueChange],
 		)
 
-		const handleBlur = useCallback(
-			(e: React.FocusEvent<HTMLInputElement>) => {
-				if (inputText) {
-					const normalized = inputText.replace(',', '.')
-					const parsed = parseFloat(normalized)
-					if (!isNaN(parsed)) {
-						const final = String(parsed)
-						if (final !== inputText) {
-							setInputText(final)
-						}
-					} else {
-						setInputText('')
+		const handleBlur = useCallback(() => {
+			if (inputText) {
+				const normalized = inputText.replace(',', '.')
+				const parsed = parseFloat(normalized)
+				if (!isNaN(parsed)) {
+					const final = String(parsed)
+					if (final !== inputText) {
+						setInputText(final)
 					}
+				} else {
+					setInputText('')
 				}
-			},
-			[inputText],
-		)
+			}
+		}, [inputText])
 
 		const handleClear = useCallback(() => {
 			setInputText('')
@@ -149,10 +146,6 @@ export const ConverterField = observer(
 									}
 								}}
 								onBlur={handleBlur}
-								inputProps={{
-									inputMode: 'decimal',
-									pattern: '[0-9]*[.,]?[0-9]*',
-								}}
 							>
 								<Label className='sr-only'>Сумма</Label>
 								<Input
@@ -161,6 +154,8 @@ export const ConverterField = observer(
 									placeholder='0.0'
 									onInput={handleInput}
 									onBlur={handleBlur}
+									inputMode='decimal'
+									pattern='[0-9]*[.,]?[0-9]*'
 								/>
 							</TextField>
 						</I18nProvider>
