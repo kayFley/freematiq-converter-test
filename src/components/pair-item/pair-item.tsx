@@ -13,7 +13,12 @@ export const PairItem = observer(({ pair }: { pair: ConversionPair }) => {
 	}, [pair.id])
 
 	const handleAmountFromChange = useCallback(
-		(value: number) => converterStore.updatePairAmountFrom(pair.id, value),
+		(value: number | null) => {
+			converterStore.updatePairAmountFrom(
+				pair.id,
+				value === null ? null : value,
+			)
+		},
 		[pair.id],
 	)
 
@@ -24,7 +29,9 @@ export const PairItem = observer(({ pair }: { pair: ConversionPair }) => {
 	)
 
 	const handleAmountToChange = useCallback(
-		(value: number) => converterStore.updatePairAmountTo(pair.id, value),
+		(value: number | null) => {
+			converterStore.updatePairAmountTo(pair.id, value === null ? null : value)
+		},
 		[pair.id],
 	)
 
@@ -51,8 +58,7 @@ export const PairItem = observer(({ pair }: { pair: ConversionPair }) => {
 
 		const fromRate =
 			fromCurrency === 'RUB' ? 1 : converterStore.rates[fromCurrency]
-		const toRate =
-			toCurrency === 'RUB' ? 1 : converterStore.rates[toCurrency]
+		const toRate = toCurrency === 'RUB' ? 1 : converterStore.rates[toCurrency]
 		return (fromRate / toRate).toFixed(4)
 	}, [
 		pair.fromCurrency,

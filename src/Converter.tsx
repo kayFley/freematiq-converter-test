@@ -31,11 +31,7 @@ export const Converter = observer(() => {
 					))}
 				</AnimatePresence>
 
-				<Button
-					size='lg'
-					className={styles.addButton}
-					onClick={handleAddPair}
-				>
+				<Button size='lg' className={styles.addButton} onClick={handleAddPair}>
 					<PlusIcon />
 					Добавить пару валют
 				</Button>

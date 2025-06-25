@@ -9,9 +9,11 @@ import {
 import { COINS } from '@/constants/coins'
 import { cn } from '@/lib/utils'
 import { RiArrowLeftRightLine, RiArrowUpDownLine } from '@remixicon/react'
+import { XIcon } from 'lucide-react'
 import { observer } from 'mobx-react-lite'
-import { useCallback } from 'react'
-import { I18nProvider, Input, Label, NumberField } from 'react-aria-components'
+import { useCallback, useEffect, useState } from 'react'
+import { I18nProvider, Input, Label, TextField } from 'react-aria-components'
+import { Button } from '../ui/button/button'
 import styles from './converter-field.module.scss'
 
 export const ConverterField = observer(
@@ -27,27 +29,71 @@ export const ConverterField = observer(
 	}: {
 		className?: string
 		isLast?: boolean
-		value: number
+		value: number | null
 		currency: string
 		coins: typeof COINS
-		onValueChange: (value: number) => void
+		onValueChange: (value: number | null) => void
 		onCurrencyChange: (currency: string) => void
 		onSwap?: () => void
+		onClear?: () => void
 	}) => {
-		const handleValueChange = useCallback(
-			(value: number) => onValueChange(value),
+		const [inputText, setInputText] = useState<string>(
+			value != null ? String(value) : '',
+		)
+
+		useEffect(() => {
+			const newText = value != null ? String(value) : ''
+			if (newText !== inputText) {
+				setInputText(newText)
+			}
+		}, [value])
+
+		const handleInput = useCallback(
+			(e: React.FormEvent<HTMLInputElement>) => {
+				const raw = e.currentTarget.value
+				setInputText(raw)
+				const normalized = raw.replace(',', '.')
+				const parsed = parseFloat(normalized)
+				if (normalized === '' || isNaN(parsed)) {
+					onValueChange(null)
+				} else {
+					onValueChange(parsed)
+				}
+			},
 			[onValueChange],
 		)
 
+		const handleBlur = useCallback(() => {
+			if (inputText) {
+				const normalized = inputText.replace(',', '.')
+				const parsed = parseFloat(normalized)
+				if (!isNaN(parsed)) {
+					const final = String(parsed)
+					if (final !== inputText) {
+						setInputText(final)
+					}
+				} else {
+					setInputText('')
+				}
+			}
+		}, [inputText])
+
+		const handleClear = useCallback(() => {
+			setInputText('')
+			onValueChange(null)
+		}, [onValueChange])
+
 		const handleCurrencyChange = useCallback(
-			(currency: string) => onCurrencyChange(currency),
+			(cur: string) => {
+				onCurrencyChange(cur)
+			},
 			[onCurrencyChange],
 		)
 
-		const valueStr = value.toString().replace(/,/g, '')
+		const valueStr = inputText.replace(/,/g, '')
 		const valueLength = valueStr.length
-
 		const getTextSizeClass = () => {
+			if (valueLength === 0) return styles.inputSizeXXLarge
 			if (valueLength <= 12) return styles.inputSizeXXLarge
 			if (valueLength <= 16) return styles.inputSizeXLarge
 			if (valueLength <= 18) return styles.inputSizeLarge
@@ -66,17 +112,11 @@ export const ConverterField = observer(
 						tabIndex={0}
 					>
 						<RiArrowLeftRightLine
-							className={cn(
-								'text-primary-foreground',
-								styles.arrowHorizontal,
-							)}
+							className={cn('text-primary-foreground', styles.arrowHorizontal)}
 							size={20}
 						/>
 						<RiArrowUpDownLine
-							className={cn(
-								'text-primary-foreground',
-								styles.arrowVertical,
-							)}
+							className={cn('text-primary-foreground', styles.arrowVertical)}
 							size={20}
 						/>
 					</div>
@@ -89,51 +129,54 @@ export const ConverterField = observer(
 					)}
 				>
 					{isLast && (
-						<div
-							className={styles.topBorder}
-							aria-hidden='true'
-						></div>
+						<div className={styles.topBorder} aria-hidden='true'></div>
 					)}
 					<div className={styles.inputWrapper}>
 						<I18nProvider locale='ru-RU'>
-							<NumberField
-								value={value}
-								onChange={handleValueChange}
-								minValue={0}
-								formatOptions={{
-									minimumFractionDigits: 1,
-									maximumFractionDigits: 2,
-									useGrouping: true,
+							<TextField
+								value={inputText}
+								onChange={(val: string) => {
+									setInputText(val)
+									const normalized = val.replace(',', '.')
+									const parsed = parseFloat(normalized)
+									if (normalized === '' || isNaN(parsed)) {
+										onValueChange(null)
+									} else {
+										onValueChange(parsed)
+									}
 								}}
+								onBlur={handleBlur}
 							>
 								<Label className='sr-only'>Сумма</Label>
 								<Input
-									className={cn(
-										styles.input,
-										getTextSizeClass(),
-									)}
+									className={cn(styles.input, getTextSizeClass())}
+									maxLength={20}
 									placeholder='0.0'
+									onInput={handleInput}
+									onBlur={handleBlur}
+									inputMode='decimal'
+									pattern='[0-9]*[.,]?[0-9]*'
 								/>
-							</NumberField>
+							</TextField>
 						</I18nProvider>
+						{inputText !== '' && (
+							<Button
+								type='button'
+								size='icon'
+								variant='ghost'
+								onClick={handleClear}
+							>
+								<XIcon />
+							</Button>
+						)}
 					</div>
 					<div>
-						<Select
-							value={currency}
-							onValueChange={handleCurrencyChange}
-						>
-							<SelectTrigger
-								className={styles.selectTriggerCustom}
-							>
+						<Select value={currency} onValueChange={handleCurrencyChange}>
+							<SelectTrigger className={styles.selectTriggerCustom}>
 								<SelectValue placeholder='Select coin' />
 							</SelectTrigger>
-							<SelectContent
-								className='dark [&_*[role=option]>span>svg]:text-muted-foreground/80 border-none inset-shadow-[0_1px_rgb(255_255_255/0.15)] shadow-black/10 dark:bg-zinc-800 [&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2 [&_*[role=option]>span]:flex [&_*[role=option]>span]:items-center [&_*[role=option]>span]:gap-2 [&_*[role=option]>span>svg]:shrink-0'
-								align='center'
-							>
-								<div className={styles.searchHint}>
-									для поиска начните ввод
-								</div>
+							<SelectContent className={styles.selectContent} align='center'>
+								<div className={styles.searchHint}>для поиска начните ввод</div>
 								<div className={styles.coinGrid}>
 									<CoinItems coins={coins} />
 								</div>
