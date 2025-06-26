@@ -41,9 +41,7 @@ export class ConverterStore {
 							? item.amountFrom
 							: null,
 					amountTo:
-						item.amountTo != null && item.amountTo !== 0
-							? item.amountTo
-							: null,
+						item.amountTo != null && item.amountTo !== 0 ? item.amountTo : null,
 				}))
 			} catch (e) {
 				this.pairs = []
@@ -60,7 +58,6 @@ export class ConverterStore {
 			clearTimeout(this.saveTimeout)
 		}
 		this.saveTimeout = setTimeout(() => {
-			// Сохраняем as-is, с null. При загрузке отличим от 0.
 			localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.pairs))
 			this.saveTimeout = null
 		}, SAVE_DELAY)
@@ -68,16 +65,42 @@ export class ConverterStore {
 
 	async fetchRates() {
 		this.loading = true
-		try {
-			const response = await fetch(
-				'https://www.cbr-xml-daily.ru/daily_json.js',
-			)
-			const data = await response.json()
 
-			const rates: CurrencyRate = { RUB: 1 }
-			Object.values(data.Valute).forEach((valute: any) => {
-				rates[valute.CharCode] = valute.Value / valute.Nominal
-			})
+		try {
+			const isOnline = navigator.onLine
+			let rates: CurrencyRate = { RUB: 1 }
+
+			const cachedRates = localStorage.getItem('currencyRates')
+
+			if (isOnline) {
+				try {
+					const response = await fetch(
+						'https://www.cbr-xml-daily.ru/daily_json.js',
+					)
+					const data = await response.json()
+
+					Object.values(data.Valute).forEach((valute: any) => {
+						rates[valute.CharCode] = valute.Value / valute.Nominal
+					})
+
+					localStorage.setItem('currencyRates', JSON.stringify(rates))
+					this.error = null
+				} catch (e) {
+					console.error('Online fetch failed, using cache', e)
+					if (cachedRates) {
+						rates = JSON.parse(cachedRates)
+						this.error = 'Using cached rates (online fetch failed)'
+					} else {
+						throw e
+					}
+				}
+			} else if (cachedRates) {
+				rates = JSON.parse(cachedRates)
+				this.error = 'Using cached rates (offline mode)'
+			} else {
+				this.error = 'No internet connection and no cached rates'
+				return
+			}
 
 			runInAction(() => {
 				this.rates = rates
@@ -86,7 +109,7 @@ export class ConverterStore {
 			})
 		} catch (e) {
 			runInAction(() => {
-				this.error = 'err'
+				this.error = 'Failed to load rates'
 			})
 		} finally {
 			runInAction(() => {
