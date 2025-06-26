@@ -11,8 +11,9 @@
 .offlineBanner {
 	position: fixed;
 	top: 0;
-	left: 0;
-	right: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: auto;
 	color: orangered;
 	text-align: center;
 	padding: 8px;
