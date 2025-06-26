@@ -8,6 +8,17 @@
 	background-color: var(--background);
 }
 
+.offlineBanner {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	color: orangered;
+	text-align: center;
+	padding: 8px;
+	z-index: 1000;
+}
+
 .dark {
 	.container {
 		background-color: rgba(var(--secondary), 0.64);

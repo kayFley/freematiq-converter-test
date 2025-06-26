@@ -8,12 +8,15 @@ import { observer } from 'mobx-react-lite'
 import { AnimatePresence, motion } from 'motion/react'
 import { useCallback } from 'react'
 import { ModeToggle } from './components/mode-toggle/mode-toggle'
+import { useNetworkStatus } from './hooks/useNetworkStatus'
 
 export const Converter = observer(() => {
 	const handleAddPair = useCallback(() => converterStore.addPair(), [])
+	const isOnline = useNetworkStatus()
 
 	return (
 		<ThemeProvider defaultTheme='system' storageKey='vite-ui-theme'>
+			{!isOnline && <div className={styles.offlineBanner}>Оффлайн режим.</div>}
 			<ModeToggle />
 			<div className={`${styles.container}`}>
 				<AnimatePresence>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Offline | Currency Converter</title>
+		<style>
+			body {
+				font-family: sans-serif;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+				background-color: #f5f5f5;
+				text-align: center;
+			}
+			.container {
+				padding: 2rem;
+				max-width: 500px;
+			}
+			button {
+				margin-top: 1rem;
+				padding: 0.5rem 1rem;
+				background: #3b82f6;
+				color: white;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>You're offline</h1>
+			<p>This app requires an internet connection.</p>
+			<p>Please check your network connection and try again.</p>
+			<button onclick="window.location.reload()">Retry</button>
+		</div>
+	</body>
+</html>
