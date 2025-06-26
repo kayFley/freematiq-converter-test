@@ -20,6 +20,16 @@
 	z-index: 1000;
 }
 
+.addButton {
+	opacity: 0.8;
+	transition: opacity 150ms ease;
+	margin-bottom: 24px;
+
+	&:hover {
+		opacity: 1;
+	}
+}
+
 .dark {
 	.container {
 		background-color: rgba(var(--secondary), 0.64);
@@ -32,6 +42,7 @@
 	.addButton {
 		opacity: 0.8;
 		transition: opacity 150ms ease;
+		margin-bottom: 24px;
 
 		&:hover {
 			opacity: 1;
